@@ -1,9 +1,9 @@
 <?php
 /**
 Plugin Name: Conditional Widgets
-Plugin URI: 
+Plugin URI: http://wordpress.org/extend/plugins/conditional-widgets/
 Description: Grants users advanced control over which pages and categories each widget is displayed on
-Version: 1.0
+Version: 1.0.1
 Author: Jason Lemahieu and Kevin Graeme
 Author URI: 
 License: GPLv2
@@ -30,8 +30,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 function conditional_widgets_form($widget, $return, $instance) {
 	
+	//prefill variables
+	$instance = conditional_widgets_init_instance($instance);
+	
 	//whether to display ON or OFF so users can easily see which widgets are conditional
-	if ($instance['cw_home_enable_checkbox'] || $instance['cw_cats_enable_checkbox'] || $instance['cw_pages_enable_checkbox']) {
+	if ($instance['cw_home_enable_checkbox']||  $instance['cw_cats_enable_checkbox'] || $instance['cw_pages_enable_checkbox']) {
 		$active = true;
 	} else {
 		$active = false;
@@ -187,7 +190,7 @@ function conditional_widgets_widget($instance) {
 	
 	
 	$arr_pages = $instance['cw_selected_pages'];
-	
+		
 	if ($instance['cw_pages_enable_checkbox'] && is_page()) {
 		//box checked for caring about what pages
 		$current_page_id = $wp_query->post->ID;
@@ -312,7 +315,7 @@ add_filter('widget_update_callback', 'conditional_widgets_update', 10, 2);
  */
 function conditional_widgets_page_checkboxes($selected=array()) {
 	echo "<ul class='conditional-widget-selection-list'>";
-	wp_list_pages( array( 'exclude' => $post->ID, 'title_li' => null, 'walker' => new Conditional_Widgets_Walker_Page_Checklist($selected) ) );
+	wp_list_pages( array( 'title_li' => null, 'walker' => new Conditional_Widgets_Walker_Page_Checklist($selected) ) );
 	echo "</ul>";
 }
 
@@ -363,6 +366,7 @@ class Conditional_Widget_Walker_Category_Checklist extends Walker {
 class Conditional_Widgets_Walker_Page_Checklist extends Walker {
 
 	function __construct($selected = array()) {
+		//$this->checked should be an array
 		$this->checked = $selected;
 	}
 
@@ -438,3 +442,33 @@ if (strpos($_SERVER['REQUEST_URI'], 'widgets.php')) {
 	add_action('admin_print_scripts', 'conditional_widgets_admin_scripts');
 }
   
+/**
+ * Initializes a fresh widget instance
+ */
+function conditional_widgets_init_instance($instance) {
+	//single values
+	$keys = array('cw_home_enable_checkbox',
+					'cw_select_home_page',
+					'cw_pages_enable_checkbox',
+					'cw_select_pages',
+					'cw_pages_sub_checkbox',
+					'cw_cats_enable_checkbox',
+					'cw_select_cats',
+					'cw_cats_sub_checkbox',
+					);
+	foreach ($keys as $key) {
+		if (!isset($instance[$key])) {
+			$instance[$key] = '';
+		}
+	}
+	
+	//arrays
+	$arraykeys = array('cw_selected_pages',
+						'cw_selected_cats');
+	foreach ($arraykeys as $arraykey) {
+		if (!isset($instance[$arraykey])) {
+			$instance[$arraykey] = array();
+		}
+	}
+	return $instance;
+}

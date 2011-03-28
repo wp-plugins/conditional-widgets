@@ -29,6 +29,9 @@ Standard Installation Procedure
 
 == Changelog ==
 
+= 1.0.1 =
+* Basic bug fixes: resolved some warnings and errors. (Sorry for the inconvenience.)
+
 = 1.0 =
 * Initial Release
 
