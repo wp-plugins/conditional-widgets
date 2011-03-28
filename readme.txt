@@ -1,5 +1,5 @@
 === Conditional Widgets ===
-Contributors: madtownlems, kgraeme
+Contributors: MadtownLems, kgraeme
 Tags: media, files
 Requires at least: 2.8.6
 Tested up to: 3.1
