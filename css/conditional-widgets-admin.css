@@ -1,0 +1,59 @@
+#cets-conditional-widget {
+    background: #F9F9F9;
+    border: 1px solid #DFDFDF;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-khtml-border-radius: 4px;
+	border-radius: 4px;
+}
+#cets-conditional-widget * {font-size: 11px;}
+#cets-conditional-widget .conditional-widget-top {height: 26px; overflow: hidden;}
+#cets-conditional-widget .conditional-widget-title-action { float: right;}
+#cets-conditional-widget .conditional-widget-title-action a {
+	background: url("../images/menu-bits.png") no-repeat scroll 0 -110px transparent;
+    display: block;
+    height: 26px;
+    width: 24px;
+}
+#cets-conditional-widget .conditional-widget-title {padding: 5px 9px;}
+#cets-conditional-widget h5 {margin: 0; color: #666666;}
+#cets-conditional-widget .conditional-widget-header {
+	font-weight: bold;
+	font-size: 1.1em;
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+#cets-conditional-widget .conditional-widget-sub-heading {
+	font-size: 1em;
+}
+#cets-conditional-widget div.conditional-widgets-checkbox-wrapper {
+	overflow: scroll;
+	height: 280px;
+	padding: 6px;
+	border: 1px solid #DFDFDF;
+	background: #FFF;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-khtml-border-radius: 4px;
+	border-radius: 4px;
+}
+#cets-conditional-widget div.conditional-widgets-checkbox-wrapper ul.children {
+	margin-left: 10px;
+}
+#cets-conditional-widget div.conditional-widgets-checkbox-wrapper ul.children li {
+	font-size: 12px;
+}
+#cets-conditional-widget span.cw_sub_checkbox {
+	margin-left: 14px;
+}
+#cets-conditional-widget div.conditional-widgets-selection-list li {
+	margin-bottom: 0px;
+}
+#cets-conditional-widget div.conditional-widget-form {
+	display: none;
+    padding: 12px;
+	border-top: 1px solid #DFDFDF;
+}
+#cets-conditional-widget .conditional-widgets-active {color: green;}
+#cets-conditional-widget .conditional-widgets-inactive {color: #CCC;}
+#cets-conditional-widget p.cw-instructions {}
