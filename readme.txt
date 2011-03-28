@@ -11,7 +11,7 @@ This plugin adds a form to each widget on the Widgets panel which allows users t
 
 This plugin adds a form to each widget on the Widgets panel which allows users to choose which pages and/or categories the widget is either displayed on or hidden from.
 
-For each widget, you can choose criteria to either SHOW or HIDE the widget, based on a number of categories.  The interface is quite intuitive, and requires no knowledge of php or conditional tags.
+For each widget, you can choose criteria to either SHOW or HIDE the widget, based on a number of criteria.  The interface is quite intuitive, and requires no knowledge of php or conditional tags.
 
 
 == Installation ==
