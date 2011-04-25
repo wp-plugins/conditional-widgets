@@ -29,6 +29,9 @@ Standard Installation Procedure
 
 == Changelog ==
 
+= 1.0.2 =
+* Minor tweak to play nicely with some additional 3rd party plugins and their additional processing
+
 = 1.0.1 =
 * Basic bug fixes: resolved some warnings and errors. (Sorry for the inconvenience.)
 

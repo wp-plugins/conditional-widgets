@@ -3,7 +3,7 @@
 Plugin Name: Conditional Widgets
 Plugin URI: http://wordpress.org/extend/plugins/conditional-widgets/
 Description: Grants users advanced control over which pages and categories each widget is displayed on
-Version: 1.0.1
+Version: 1.0.2
 Author: Jason Lemahieu and Kevin Graeme
 Author URI: 
 License: GPLv2
@@ -119,7 +119,7 @@ function conditional_widgets_form($widget, $return, $instance) {
  * Process the form submission. (Save settings.)
  */
 function conditional_widgets_update($new_instance, $old_instance) {
-	$instance = $old_instance;  //save old data, and only change the following stuff:
+	$instance = $new_instance;  //save old data, and only change the following stuff:
 	
 	//home
 	$instance['cw_home_enable_checkbox'] = isset($_POST['cw_home_enable_checkbox']) ? 1:0;
