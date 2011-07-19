@@ -3,7 +3,7 @@
 Plugin Name: Conditional Widgets
 Plugin URI: http://wordpress.org/extend/plugins/conditional-widgets/
 Description: Grants users advanced control over which pages and categories each widget is displayed on
-Version: 1.0.2
+Version: 1.0.3
 Author: Jason Lemahieu and Kevin Graeme
 Author URI: 
 License: GPLv2
@@ -119,6 +119,7 @@ function conditional_widgets_form($widget, $return, $instance) {
  * Process the form submission. (Save settings.)
  */
 function conditional_widgets_update($new_instance, $old_instance) {
+	
 	$instance = $new_instance;  //save old data, and only change the following stuff:
 	
 	//home
@@ -138,6 +139,7 @@ function conditional_widgets_update($new_instance, $old_instance) {
 	$instance['cw_selected_pages'] = $_POST['cw_selected_pages'];
 	
 	return $instance;
+	
 }
 
 /**
@@ -165,6 +167,8 @@ function conditional_widgets_widget($instance) {
 	global $wp_query;
 	$qvars = $wp_query->query_vars;
 
+	$instance = conditional_widgets_init_instance($instance);
+	
 	if ($instance['cw_home_enable_checkbox']) {
 		//box checked for home page logic takes priority by processing first
 		switch ($instance['cw_select_home_page']) {
@@ -257,7 +261,7 @@ function conditional_widgets_widget($instance) {
 		//if this is a single_post
 		if (is_single()) {
 			//get the categories of the post
-			$postcats = get_the_category($qvars->p);
+			$postcats = get_the_category($qvars['p']);
 			
 			foreach ($postcats as $cat) {
 				if (in_array($cat->term_id, $arr_cats)) {
