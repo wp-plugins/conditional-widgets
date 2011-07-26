@@ -3,7 +3,7 @@
 Plugin Name: Conditional Widgets
 Plugin URI: http://wordpress.org/extend/plugins/conditional-widgets/
 Description: Grants users advanced control over which pages and categories each widget is displayed on
-Version: 1.0.3
+Version: 1.1
 Author: Jason Lemahieu and Kevin Graeme
 Author URI: 
 License: GPLv2
@@ -34,7 +34,7 @@ function conditional_widgets_form($widget, $return, $instance) {
 	$instance = conditional_widgets_init_instance($instance);
 	
 	//whether to display ON or OFF so users can easily see which widgets are conditional
-	if ($instance['cw_home_enable_checkbox']||  $instance['cw_cats_enable_checkbox'] || $instance['cw_pages_enable_checkbox']) {
+	if ($instance['cw_home_enable_checkbox']||  $instance['cw_cats_enable_checkbox'] || $instance['cw_pages_enable_checkbox'] || $instance['cw_404_hide'] || $instance['cw_search_hide'] || $instance['cw_author_archive_hide'] || $instance['cw_date_archive_hide']) {
 		$active = true;
 	} else {
 		$active = false;
@@ -103,6 +103,32 @@ function conditional_widgets_form($widget, $return, $instance) {
 			?>
 			</div>
 		
+			<h6 class="conditional-widget-header conditional-widget-sub-heading">Special Page Options</h6>
+			
+			<ul class=conditional-widgets-special-page-option-list'>
+				<!-- 404 -->
+				<li>
+					<input type="checkbox" name="cw_404_hide_checkbox" <?php checked($instance['cw_404_hide']); ?>>	Hide on 404s (Page Not Found)
+				</li>
+				
+				<!-- search results -->
+				<li>
+					<input type="checkbox" name="cw_search_hide_checkbox" <?php checked($instance['cw_search_hide']); ?>>	Hide when displaying Search Reults
+				</li>
+			
+				<!-- archives -->
+				<li>
+					<input type="checkbox" name="cw_author archive_hide_checkbox" <?php checked($instance['cw_author_archive_hide']); ?>>	Hide on Author Archives
+				</li>
+				<li>
+					<input type="checkbox" name="cw_date archive_hide_checkbox" <?php checked($instance['cw_date_archive_hide']); ?>>	Hide on Date Archives
+				</li>
+				
+				
+			</ul>
+			
+		
+		
 		
 		</div> <!-- toggled div -->
 	
@@ -138,6 +164,13 @@ function conditional_widgets_update($new_instance, $old_instance) {
 	$instance['cw_pages_sub_checkbox'] = isset($_POST['cw_pages_sub_checkbox']) ? 1:0;
 	$instance['cw_selected_pages'] = $_POST['cw_selected_pages'];
 	
+	// utility - since 1.0.4
+	//404, search, archive
+	$instance['cw_404_hide'] = isset($_POST['cw_404_hide_checkbox']) ? 1:0;
+	$instance['cw_search_hide'] = isset($_POST['cw_search_hide_checkbox']) ? 1:0;
+	$instance['cw_date_archive_hide'] = isset($_POST['cw_date_archive_hide_checkbox']) ? 1:0;
+	$instance['cw_author_archive_hide'] = isset($_POST['cw_author_archive_hide_checkbox']) ? 1:0;
+
 	return $instance;
 	
 }
@@ -162,6 +195,13 @@ function conditional_widgets_widget($instance) {
 	$instance['cw_select_cats']
 	$instance['cw_cats_sub_checkbox']
 	$instance['cw_selected_cats']
+	
+	// utility
+	$instance['cw_404_hide']
+	$instance['cw_search_hide']
+	$instance['cw_date_archive_hide']
+	$instance['cw_date_author_hide']
+	
 	*/
 	
 	global $wp_query;
@@ -302,6 +342,35 @@ function conditional_widgets_widget($instance) {
 		}
 		
 	} //if we care about categories
+	
+	
+	// since 1.1
+	if (is_404()) {
+		if ($instance['cw_404_hide'] == 1) {
+			return false;
+		}
+	}  //if 404
+	
+	// since 1.1
+	if (is_search()) {		
+		if ($instance['cw_search_hide'] == 1) {
+			return false;
+		}
+	} // if search
+	
+	// since 1.1
+	if (is_author()) {
+		if ($instance['cw_author_archive_hide'] == 1) {
+			return false;
+		}
+	}
+	
+	// since 1.1
+	if (is_date()) {
+		if ($instance['cw_date_archive_hide'] == 1) {
+			return false;
+		}
+	}
 	
 	//default to showing
 	return $instance;
@@ -459,6 +528,10 @@ function conditional_widgets_init_instance($instance) {
 					'cw_cats_enable_checkbox',
 					'cw_select_cats',
 					'cw_cats_sub_checkbox',
+					'cw_404_hide',
+					'cw_search_hide',
+					'cw_author_archive_hide',
+					'cw_date_archive_hide',
 					);
 	foreach ($keys as $key) {
 		if (!isset($instance[$key])) {

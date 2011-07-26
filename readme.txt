@@ -2,7 +2,7 @@
 Contributors: MadtownLems, kgraeme
 Tags: media, files
 Requires at least: 2.8.6
-Tested up to: 3.1
+Tested up to: 3.2.1
 Stable tag: trunk
 
 This plugin adds a form to each widget on the Widgets panel which allows users to choose which pages and/or categories the widget is either displayed on or hidden from.
@@ -29,8 +29,11 @@ Standard Installation Procedure
 
 == Changelog ==
 
+= 1.1 =
+* Added options for Search, 404, Date Archives, and Author Archives
+
 = 1.0.2 =
-* Minor tweak to play nicely with some additional 3rd party plugins and their additional processing
+* Small edit to play nicely with some other plugins and their additional processing
 
 = 1.0.1 =
 * Basic bug fixes: resolved some warnings and errors. (Sorry for the inconvenience.)
