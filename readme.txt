@@ -1,6 +1,6 @@
 === Conditional Widgets ===
 Contributors: MadtownLems, kgraeme
-Tags: media, files
+Tags: widgets
 Requires at least: 2.8.6
 Tested up to: 3.2.1
 Stable tag: trunk
@@ -10,6 +10,8 @@ This plugin adds a form to each widget on the Widgets panel which allows users t
 == Description ==
 
 This plugin adds a form to each widget on the Widgets panel which allows users to choose which pages and/or categories the widget is either displayed on or hidden from.
+
+Additionally, widgets can be configured to be hidden from Search Result pages, 404 pages, Date Archives, and Author Archives.
 
 For each widget, you can choose criteria to either SHOW or HIDE the widget, based on a number of categories.  The interface is quite intuitive, and requires no knowledge of php or conditional tags.
 
