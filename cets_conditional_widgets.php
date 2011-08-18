@@ -3,7 +3,7 @@
 Plugin Name: Conditional Widgets
 Plugin URI: http://wordpress.org/extend/plugins/conditional-widgets/
 Description: Grants users advanced control over which pages and categories each widget is displayed on
-Version: 1.1
+Version: 1.2
 Author: Jason Lemahieu and Kevin Graeme
 Author URI: 
 License: GPLv2
@@ -118,10 +118,13 @@ function conditional_widgets_form($widget, $return, $instance) {
 			
 				<!-- archives -->
 				<li>
-					<input type="checkbox" name="cw_author archive_hide_checkbox" <?php checked($instance['cw_author_archive_hide']); ?>>	Hide on Author Archives
+					<input type="checkbox" name="cw_author_archive_hide_checkbox" <?php checked($instance['cw_author_archive_hide']); ?>>	Hide on Author Archives
 				</li>
 				<li>
-					<input type="checkbox" name="cw_date archive_hide_checkbox" <?php checked($instance['cw_date_archive_hide']); ?>>	Hide on Date Archives
+					<input type="checkbox" name="cw_date_archive_hide_checkbox" <?php checked($instance['cw_date_archive_hide']); ?>>	Hide on Date Archives
+				</li>
+				<li>
+					<input type="checkbox" name="cw_tag_archive_hide_checkbox" <?php checked($instance['cw_tag_archive_hide']); ?>>	Hide on Tag Archives
 				</li>
 				
 				
@@ -170,7 +173,8 @@ function conditional_widgets_update($new_instance, $old_instance) {
 	$instance['cw_search_hide'] = isset($_POST['cw_search_hide_checkbox']) ? 1:0;
 	$instance['cw_date_archive_hide'] = isset($_POST['cw_date_archive_hide_checkbox']) ? 1:0;
 	$instance['cw_author_archive_hide'] = isset($_POST['cw_author_archive_hide_checkbox']) ? 1:0;
-
+	$instance['cw_tag_archive_hide'] = isset($_POST['cw_tag_archive_hide_checkbox']) ? 1:0;
+	
 	return $instance;
 	
 }
@@ -200,7 +204,8 @@ function conditional_widgets_widget($instance) {
 	$instance['cw_404_hide']
 	$instance['cw_search_hide']
 	$instance['cw_date_archive_hide']
-	$instance['cw_date_author_hide']
+	$instance['cw_author_archive_hide']
+	$instance['cw_tag_archive_hide']
 	
 	*/
 	
@@ -372,6 +377,13 @@ function conditional_widgets_widget($instance) {
 		}
 	}
 	
+	//since 1.2
+	if (is_tag()) {
+		if ($instance['cw_tag_archive_hide'] == 1) {
+			return false;
+		}
+	}
+	
 	//default to showing
 	return $instance;
 	
@@ -532,6 +544,7 @@ function conditional_widgets_init_instance($instance) {
 					'cw_search_hide',
 					'cw_author_archive_hide',
 					'cw_date_archive_hide',
+					'cw_tag_archive_hide',
 					);
 	foreach ($keys as $key) {
 		if (!isset($instance[$key])) {
