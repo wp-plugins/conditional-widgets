@@ -3,7 +3,7 @@
 Plugin Name: Conditional Widgets
 Plugin URI: http://wordpress.org/extend/plugins/conditional-widgets/
 Description: Grants users advanced control over which pages and categories each widget is displayed on
-Version: 1.2
+Version: 1.4
 Author: Jason Lemahieu and Kevin Graeme
 Author URI: 
 License: GPLv2
@@ -30,11 +30,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 function conditional_widgets_form($widget, $return, $instance) {
 	
+	// always show the form
+	if ($return == 'noform') { $return = true; }
+	
 	//prefill variables
 	$instance = conditional_widgets_init_instance($instance);
 	
 	//whether to display ON or OFF so users can easily see which widgets are conditional
-	if ($instance['cw_home_enable_checkbox']||  $instance['cw_cats_enable_checkbox'] || $instance['cw_pages_enable_checkbox'] || $instance['cw_404_hide'] || $instance['cw_search_hide'] || $instance['cw_author_archive_hide'] || $instance['cw_date_archive_hide']) {
+	if ($instance['cw_home_enable_checkbox']||  $instance['cw_cats_enable_checkbox'] || $instance['cw_pages_enable_checkbox'] || $instance['cw_404_hide'] || $instance['cw_search_hide'] || $instance['cw_author_archive_hide'] || $instance['cw_date_archive_hide'] || $instance['cw_tag_archive_hide'] || $instance['cw_posts_page_hide']) {
 		$active = true;
 	} else {
 		$active = false;
@@ -70,7 +73,7 @@ function conditional_widgets_form($widget, $return, $instance) {
 			</p>
 			
 			<p>
-			<input type="checkbox" name="cw_home_enable_checkbox" <?php checked($instance['cw_home_enable_checkbox']); ?>> <?php conditional_widgets_form_show_hide_select('cw_select_home_page', $instance['cw_select_home_page'], true); ?> on Home Page
+			<input type="checkbox" name="cw_home_enable_checkbox" <?php checked($instance['cw_home_enable_checkbox']); ?>> <?php conditional_widgets_form_show_hide_select('cw_select_home_page', $instance['cw_select_home_page'], true); ?> on Front Page
 			</p>
 			
 			<h6 class="conditional-widget-header conditional-widget-sub-heading">Categories</h6>
@@ -106,6 +109,11 @@ function conditional_widgets_form($widget, $return, $instance) {
 			<h6 class="conditional-widget-header conditional-widget-sub-heading">Special Page Options</h6>
 			
 			<ul class=conditional-widgets-special-page-option-list'>
+				<!-- posts page -->
+				<li>
+					<input type="checkbox" name="cw_posts_page_hide_checkbox" <?php checked($instance['cw_posts_page_hide']); ?>>	Hide on Posts Page (when using a static front page)
+				</li>
+				
 				<!-- 404 -->
 				<li>
 					<input type="checkbox" name="cw_404_hide_checkbox" <?php checked($instance['cw_404_hide']); ?>>	Hide on 404s (Page Not Found)
@@ -169,6 +177,7 @@ function conditional_widgets_update($new_instance, $old_instance) {
 	
 	// utility - since 1.0.4
 	//404, search, archive
+	$instance['cw_posts_page_hide'] = isset($_POST['cw_posts_page_hide_checkbox']) ? 1:0;
 	$instance['cw_404_hide'] = isset($_POST['cw_404_hide_checkbox']) ? 1:0;
 	$instance['cw_search_hide'] = isset($_POST['cw_search_hide_checkbox']) ? 1:0;
 	$instance['cw_date_archive_hide'] = isset($_POST['cw_date_archive_hide_checkbox']) ? 1:0;
@@ -201,6 +210,7 @@ function conditional_widgets_widget($instance) {
 	$instance['cw_selected_cats']
 	
 	// utility
+	$instance['cw_posts_page_hide']
 	$instance['cw_404_hide']
 	$instance['cw_search_hide']
 	$instance['cw_date_archive_hide']
@@ -348,6 +358,12 @@ function conditional_widgets_widget($instance) {
 		
 	} //if we care about categories
 	
+	//since 1.4
+	if (is_home()) {
+		if ($instance['cw_posts_page_hide'] == 1) {
+			return false;
+		}
+	}
 	
 	// since 1.1
 	if (is_404()) {
@@ -355,7 +371,7 @@ function conditional_widgets_widget($instance) {
 			return false;
 		}
 	}  //if 404
-	
+		
 	// since 1.1
 	if (is_search()) {		
 		if ($instance['cw_search_hide'] == 1) {
@@ -545,6 +561,7 @@ function conditional_widgets_init_instance($instance) {
 					'cw_author_archive_hide',
 					'cw_date_archive_hide',
 					'cw_tag_archive_hide',
+					'cw_posts_page_hide',
 					);
 	foreach ($keys as $key) {
 		if (!isset($instance[$key])) {

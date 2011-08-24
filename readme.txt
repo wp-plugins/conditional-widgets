@@ -29,6 +29,12 @@ Standard Installation Procedure
 
 == Changelog ==
 
+= 1.4 =
+* Added support for Posts Pages (when using Static Front Page)
+
+= 1.3 =
+* Added support for saving options on Widgets that didn't otherwise have options
+
 = 1.2 =
 * Added option for Tag Archives (by request)
 
