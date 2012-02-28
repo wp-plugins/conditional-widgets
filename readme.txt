@@ -2,7 +2,7 @@
 Contributors: MadtownLems, kgraeme
 Tags: media, files
 Requires at least: 2.8.6
-Tested up to: 3.3
+Tested up to: 3.3.1
 Stable tag: trunk
 
 This plugin adds a form to each widget on the Widgets panel which allows users to choose which pages and/or categories the widget is either displayed on or hidden from.
@@ -28,6 +28,10 @@ Standard Installation Procedure
 
 
 == Changelog ==
+
+= 1.5 =
+* Fixed a bug surrounding the extra conditional checks on some configurations
+* Added debugging and informative statements while WP_DEBUG is enabled
 
 = 1.4 =
 * Added support for Posts Pages (when using Static Front Page)

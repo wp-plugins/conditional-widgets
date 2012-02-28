@@ -3,7 +3,7 @@
 Plugin Name: Conditional Widgets
 Plugin URI: http://wordpress.org/extend/plugins/conditional-widgets/
 Description: Grants users advanced control over which pages and categories each widget is displayed on
-Version: 1.4
+Version: 1.5
 Author: Jason Lemahieu and Kevin Graeme
 Author URI: 
 License: GPLv2
@@ -219,6 +219,11 @@ function conditional_widgets_widget($instance) {
 	
 	*/
 	
+	if (WP_DEBUG) {
+		$debug = true;
+	} else {
+		$debug = false;
+	}
 	global $wp_query;
 	$qvars = $wp_query->query_vars;
 
@@ -229,18 +234,22 @@ function conditional_widgets_widget($instance) {
 		switch ($instance['cw_select_home_page']) {
 			case 0: //hide if front page
 				if (is_front_page()) {
+					if ($debug) {echo "[Widget hidden because front page.]<br/><br/>"; }
 					return false;
 				}
 				break;
 			case 1: //show if front page
 				if (is_front_page()) {
+					if ($debug) {echo "Showing because front page:<br/>"; }
 					return $instance;
 				}
 				break;
 			case 2: //only show on front, hide otherwise
 				if (is_front_page()) {
+					if ($debug) {echo "Showing because front page:<br/>"; }
 					return $instance;
 				} else {
+					if ($debug) {echo "[ Widget hidden because not front page]<br/><br/>"; }
 					return false;
 				}
 				break;
@@ -275,27 +284,32 @@ function conditional_widgets_widget($instance) {
 			//we matched a page
 			if ($instance['cw_select_pages'] == 1) {
 				//and we're showing on matched pages - SHOW
+				if ($debug) {echo "Showing because we're set to show on this page:<br/>"; }
 				return $instance;
 			} else {
 				//and we're hiding on matched pages - so HIDE
+				if ($debug) {echo "[Widget hidden because this page wasnt chosen to have this widget displayed.]<br/><br/>"; }
 				return false;
 			}
 		} else {
 			//we did NOT match a page
 			if ($instance['cw_select_pages'] == 1) {
 				//and we're telling it to show on matched pages - so HIDE
+				if ($debug) {echo "[Widget hidden because this is a page you told me to hid it on.]<br/><br/>"; }
 				return false;
 			} else {
 				//we didn't match a page, and we told it to hide on those pages - so SHOW
+				if ($debug) {echo "Showing because front page:<br/>"; }
 				return $instance;
 			}
 		}
 	} //is_page && we care
 	
-	//see if we care about categories...
-	if ($instance['cw_cats_enable_checkbox']) {
+	//see if we care about categories...   (2/28/2012: AND if this page is related to categories...)
+	$match = false;
+	if ($instance['cw_cats_enable_checkbox'] && (is_single() || is_category())) {
 		//starting point. haven't matched yet - checked categories.
-		$match = false;
+		
 		$arr_cats = $instance['cw_selected_cats'];
 
 		//expand arr_cats to include subcats
@@ -337,30 +351,36 @@ function conditional_widgets_widget($instance) {
 		
 		// Logic Processing now that we've determined whether or now we're a match
 		if ($match) {
+					
 			//we matched a cat
 			if ($instance['cw_select_cats'] == 1) {
 				//and we're showing on matched cats
+				if ($debug) {echo "Showing because I was told to show this on this category:<br/>"; }
 				return $instance;
 			} else {
 				//and we're hiding on matched cats
+				if ($debug) {echo "[Widget hidden because I was told to show on certain categories - and this isn't one of em.]<br/><br/>"; }
 				return false;
 			}
 		} else {
 			//we did NOT match a cat
 			if ($instance['cw_select_cats'] == 1) {
 				//and we're telling it to show on matched cats - so HIDE
+				if ($debug) {echo "[Widget hidden because this category doesn't match ones we were told to show on.]<br/><br/>"; }
 				return false;
 			} else {
 				//we didn't match a cat, and we told it to hide on those cats - so SHOW
+				if ($debug) {echo "Showing because this isn't one of the categories we were told to hide on:<br/>"; }
 				return $instance;
 			}
 		}
 		
 	} //if we care about categories
-	
+		
 	//since 1.4
 	if (is_home()) {
 		if ($instance['cw_posts_page_hide'] == 1) {
+			if ($debug) {echo "[Widget hidden because this is the home page.]<br/><br/>"; }
 			return false;
 		}
 	}
@@ -368,6 +388,7 @@ function conditional_widgets_widget($instance) {
 	// since 1.1
 	if (is_404()) {
 		if ($instance['cw_404_hide'] == 1) {
+			if ($debug) {echo "[Widget hidden because this is the 404 page.]<br/><br/>"; }
 			return false;
 		}
 	}  //if 404
@@ -375,6 +396,7 @@ function conditional_widgets_widget($instance) {
 	// since 1.1
 	if (is_search()) {		
 		if ($instance['cw_search_hide'] == 1) {
+			if ($debug) {echo "[Widget hidden because this is the search page.]<br/><br/>"; }
 			return false;
 		}
 	} // if search
@@ -382,6 +404,7 @@ function conditional_widgets_widget($instance) {
 	// since 1.1
 	if (is_author()) {
 		if ($instance['cw_author_archive_hide'] == 1) {
+			if ($debug) {echo "[Widget hidden because this is an author archive page.]<br/><br/>"; }
 			return false;
 		}
 	}
@@ -389,6 +412,7 @@ function conditional_widgets_widget($instance) {
 	// since 1.1
 	if (is_date()) {
 		if ($instance['cw_date_archive_hide'] == 1) {
+			if ($debug) {echo "[Widget hidden because this is a date archive page.]<br/><br/>"; }
 			return false;
 		}
 	}
@@ -396,8 +420,10 @@ function conditional_widgets_widget($instance) {
 	//since 1.2
 	if (is_tag()) {
 		if ($instance['cw_tag_archive_hide'] == 1) {
+			if ($debug) {echo "[Widget hidden because this is a tag archive.]<br/><br/>"; }
 			return false;
 		}
+
 	}
 	
 	//default to showing
