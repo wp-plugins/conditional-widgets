@@ -30,7 +30,7 @@ Standard Installation Procedure
 == Changelog ==
 
 = 1.5 =
-* Fixed a bug surrounding the extra conditional checks on some configurations
+* Fixed a bug surrounding the extra conditional checks on some configurations (Thanks, mmcginnis!)
 * Added debugging and informative statements while WP_DEBUG is enabled
 
 = 1.4 =
