@@ -1,8 +1,8 @@
 === Conditional Widgets ===
 Contributors: MadtownLems, kgraeme, CETS
 Tags: widgets
-Requires at least: 2.8.6
-Tested up to: 3.6
+Requires at least: 3.0
+Tested up to: 3.9
 Stable tag: trunk
 
 This plugin adds a form to each widget on the Widgets panel which allows users to choose which pages and/or categories the widget is either displayed on or hidden from.
@@ -28,6 +28,10 @@ Standard Installation Procedure
 
 
 == Changelog ==
+
+= 1.7 =
+* Added VERY basic string translation support
+* Tweaked UI surrounding pages/categories to be easier to understand
 
 = 1.6 =
 * Only display the informative debugging text when WP_DEBUG_DISPLAY is true

@@ -3,7 +3,7 @@
 Plugin Name: Conditional Widgets
 Plugin URI: http://wordpress.org/extend/plugins/conditional-widgets/
 Description: Grants users advanced control over which pages and categories each widget is displayed on
-Version: 1.6
+Version: 1.7
 Author: Jason Lemahieu and Kevin Graeme
 Author URI: 
 License: GPLv2
@@ -51,15 +51,15 @@ function conditional_widgets_form($widget, $return, $instance) {
             </div>
             
             <div class="conditional-widget-title">
-                <h5>Widget Display Control
+                <h5><?php _e('Widget Display Control'); ?>
                 <?php 
                 if($active) {
 					?>
-					&nbsp;<span class="conditional-widgets-active">ON</span>
+					&nbsp;<span class="conditional-widgets-active"><?php _e('ON'); ?></span>
 					<?php
                 } else {
 					?>
-                    &nbsp; <span class="conditional-widgets-inactive">OFF</span>
+                    &nbsp; <span class="conditional-widgets-inactive"><?php _e('OFF'); ?></span>
 					<?php }
 				?>
                 </h5>
@@ -69,19 +69,20 @@ function conditional_widgets_form($widget, $return, $instance) {
 		<div class="conditional-widget-form" id="conditional-widget-form-<?php print $widget->id; ?>">
 			
 			<p class='cw-instructions'>
-			Select a combination of options to control on which sections of your site this widget is shown.
+			<?php _e('Select a combination of options to control on which sections of your site this widget is shown.'); ?>
 			</p>
 			
 			<p>
-			<input type="checkbox" name="cw_home_enable_checkbox" <?php checked($instance['cw_home_enable_checkbox']); ?>> <?php conditional_widgets_form_show_hide_select('cw_select_home_page', $instance['cw_select_home_page'], true); ?> on Front Page
+			<input type="checkbox" name="cw_home_enable_checkbox" <?php checked($instance['cw_home_enable_checkbox']); ?>> <?php conditional_widgets_form_show_hide_select('cw_select_home_page', $instance['cw_select_home_page'], true); ?> <?php _e('on Front Page'); ?>
 			</p>
 			
-			<h6 class="conditional-widget-header conditional-widget-sub-heading">Categories</h6>
+			<h6 class="conditional-widget-header conditional-widget-sub-heading"><?php _e('Categories'); ?></h6>
 			
 			<p>
-			<input type="checkbox" name="cw_cats_enable_checkbox" <?php checked($instance['cw_cats_enable_checkbox']); ?>> <?php conditional_widgets_form_show_hide_select('cw_select_cats', $instance['cw_select_cats'], false); ?> on Posts in Category:<br>
+			<input type="checkbox" name="cw_cats_enable_checkbox" <?php checked($instance['cw_cats_enable_checkbox']); ?>> <?php _e('Enable Category Logic and '); ?> 
+			<?php conditional_widgets_form_show_hide_select('cw_select_cats', $instance['cw_select_cats'], false); ?> <?php _e('on Posts in selected categories:'); ?><br>
 				<span class='cw_sub_checkbox'>
-					<input type="checkbox" name="cw_cats_sub_checkbox" <?php checked($instance['cw_cats_sub_checkbox']); ?>> Include sub-categories automatically
+					<input type="checkbox" name="cw_cats_sub_checkbox" <?php checked($instance['cw_cats_sub_checkbox']); ?>> <?php _e('Include sub-categories automatically'); ?>
 				</span>
 			</p>
 			
@@ -91,12 +92,13 @@ function conditional_widgets_form($widget, $return, $instance) {
 			?>
 			</div>
 			
-			<h6 class="conditional-widget-header conditional-widget-sub-heading">Pages</h6>
+			<h6 class="conditional-widget-header conditional-widget-sub-heading"><?php _e('Pages'); ?></h6>
 			
 			<p>
-			<input type="checkbox" name="cw_pages_enable_checkbox" <?php checked($instance['cw_pages_enable_checkbox']); ?>> <?php conditional_widgets_form_show_hide_select('cw_select_pages', $instance['cw_select_pages'], false); ?> on Pages:<br>
+			<input type="checkbox" name="cw_pages_enable_checkbox" <?php checked($instance['cw_pages_enable_checkbox']); ?>> <?php _e('Enable Page Logic and '); ?>
+			<?php conditional_widgets_form_show_hide_select('cw_select_pages', $instance['cw_select_pages'], false); ?> <?php _e('on selected Pages:'); ?><br>
 				<span class='cw_sub_checkbox'>
-					<input type="checkbox" name="cw_pages_sub_checkbox" <?php checked($instance['cw_pages_sub_checkbox']); ?>> Include sub-pages automatically
+					<input type="checkbox" name="cw_pages_sub_checkbox" <?php checked($instance['cw_pages_sub_checkbox']); ?>> <?php _e('Include sub-pages automatically'); ?>
 				</span>
 			</p>
 			
@@ -106,33 +108,33 @@ function conditional_widgets_form($widget, $return, $instance) {
 			?>
 			</div>
 		
-			<h6 class="conditional-widget-header conditional-widget-sub-heading">Special Page Options</h6>
+			<h6 class="conditional-widget-header conditional-widget-sub-heading"><?php _e('Special Page Options'); ?></h6>
 			
 			<ul class="conditional-widgets-special-page-option-list">
 				<!-- posts page -->
 				<li>
-					<input type="checkbox" name="cw_posts_page_hide_checkbox" <?php checked($instance['cw_posts_page_hide']); ?>>	Hide on Posts Page (when using a static front page)
+					<input type="checkbox" name="cw_posts_page_hide_checkbox" <?php checked($instance['cw_posts_page_hide']); ?>>	<?php _e('Hide on Posts Page (when using a static front page)'); ?>
 				</li>
 				
 				<!-- 404 -->
 				<li>
-					<input type="checkbox" name="cw_404_hide_checkbox" <?php checked($instance['cw_404_hide']); ?>>	Hide on 404s (Page Not Found)
+					<input type="checkbox" name="cw_404_hide_checkbox" <?php checked($instance['cw_404_hide']); ?>>	<?php _e('Hide on 404s (Page Not Found)'); ?>
 				</li>
 				
 				<!-- search results -->
 				<li>
-					<input type="checkbox" name="cw_search_hide_checkbox" <?php checked($instance['cw_search_hide']); ?>>	Hide when displaying Search Reults
+					<input type="checkbox" name="cw_search_hide_checkbox" <?php checked($instance['cw_search_hide']); ?>>	<?php _e('Hide when displaying Search Reults'); ?>
 				</li>
 			
 				<!-- archives -->
 				<li>
-					<input type="checkbox" name="cw_author_archive_hide_checkbox" <?php checked($instance['cw_author_archive_hide']); ?>>	Hide on Author Archives
+					<input type="checkbox" name="cw_author_archive_hide_checkbox" <?php checked($instance['cw_author_archive_hide']); ?>>	<?php _e('Hide on Author Archives'); ?>
 				</li>
 				<li>
-					<input type="checkbox" name="cw_date_archive_hide_checkbox" <?php checked($instance['cw_date_archive_hide']); ?>>	Hide on Date Archives
+					<input type="checkbox" name="cw_date_archive_hide_checkbox" <?php checked($instance['cw_date_archive_hide']); ?>>	<?php _e('Hide on Date Archives'); ?>
 				</li>
 				<li>
-					<input type="checkbox" name="cw_tag_archive_hide_checkbox" <?php checked($instance['cw_tag_archive_hide']); ?>>	Hide on Tag Archives
+					<input type="checkbox" name="cw_tag_archive_hide_checkbox" <?php checked($instance['cw_tag_archive_hide']); ?>>	<?php _e('Hide on Tag Archives'); ?>
 				</li>
 				
 				
