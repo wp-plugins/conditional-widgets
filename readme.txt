@@ -29,6 +29,9 @@ Standard Installation Procedure
 
 == Changelog ==
 
+= 1.8 =
+* Added an additional checkbox for ALL pages/categories to, once again, make the UI even easier to understand
+
 = 1.7 =
 * Added VERY basic string translation support
 * Tweaked UI surrounding pages/categories to be easier to understand

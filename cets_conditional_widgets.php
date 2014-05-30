@@ -3,7 +3,7 @@
 Plugin Name: Conditional Widgets
 Plugin URI: http://wordpress.org/extend/plugins/conditional-widgets/
 Description: Grants users advanced control over which pages and categories each widget is displayed on
-Version: 1.7
+Version: 1.8
 Author: Jason Lemahieu and Kevin Graeme
 Author URI: 
 License: GPLv2
@@ -81,6 +81,11 @@ function conditional_widgets_form($widget, $return, $instance) {
 			<p>
 			<input type="checkbox" name="cw_cats_enable_checkbox" <?php checked($instance['cw_cats_enable_checkbox']); ?>> <?php _e('Enable Category Logic and '); ?> 
 			<?php conditional_widgets_form_show_hide_select('cw_select_cats', $instance['cw_select_cats'], false); ?> <?php _e('on Posts in selected categories:'); ?><br>
+				
+
+				<span class='cw_sub_checkbox'>
+					<input type="checkbox" name="cw_cats_all" value="1" <?php checked($instance['cw_cats_all']); ?>> <?php _e('ALL categories (or select below)'); ?><br/>
+				</span>
 				<span class='cw_sub_checkbox'>
 					<input type="checkbox" name="cw_cats_sub_checkbox" <?php checked($instance['cw_cats_sub_checkbox']); ?>> <?php _e('Include sub-categories automatically'); ?>
 				</span>
@@ -97,6 +102,10 @@ function conditional_widgets_form($widget, $return, $instance) {
 			<p>
 			<input type="checkbox" name="cw_pages_enable_checkbox" <?php checked($instance['cw_pages_enable_checkbox']); ?>> <?php _e('Enable Page Logic and '); ?>
 			<?php conditional_widgets_form_show_hide_select('cw_select_pages', $instance['cw_select_pages'], false); ?> <?php _e('on selected Pages:'); ?><br>
+				<span class='cw_sub_checkbox'>
+					<input type="checkbox" name="cw_pages_all" value="1" <?php checked($instance['cw_pages_all']); ?>> <?php _e('ALL pages (or select below)'); ?><br/>
+				</span>
+
 				<span class='cw_sub_checkbox'>
 					<input type="checkbox" name="cw_pages_sub_checkbox" <?php checked($instance['cw_pages_sub_checkbox']); ?>> <?php _e('Include sub-pages automatically'); ?>
 				</span>
@@ -123,7 +132,7 @@ function conditional_widgets_form($widget, $return, $instance) {
 				
 				<!-- search results -->
 				<li>
-					<input type="checkbox" name="cw_search_hide_checkbox" <?php checked($instance['cw_search_hide']); ?>>	<?php _e('Hide when displaying Search Reults'); ?>
+					<input type="checkbox" name="cw_search_hide_checkbox" <?php checked($instance['cw_search_hide']); ?>>	<?php _e('Hide when displaying Search Results'); ?>
 				</li>
 			
 				<!-- archives -->
@@ -170,12 +179,14 @@ function conditional_widgets_update($new_instance, $old_instance) {
 	$instance['cw_select_cats'] = $_POST['cw_select_cats'];
 	$instance['cw_cats_sub_checkbox'] = isset($_POST['cw_cats_sub_checkbox']) ? 1:0;
 	$instance['cw_selected_cats'] = $_POST['cw_selected_cats'];
+	$instance['cw_cats_all'] = isset($_POST['cw_cats_all']) ? 1:0;
 	
 	//pages
 	$instance['cw_pages_enable_checkbox'] = isset($_POST['cw_pages_enable_checkbox']) ? 1:0;
 	$instance['cw_select_pages'] = $_POST['cw_select_pages'];
 	$instance['cw_pages_sub_checkbox'] = isset($_POST['cw_pages_sub_checkbox']) ? 1:0;
 	$instance['cw_selected_pages'] = $_POST['cw_selected_pages'];
+	$instance['cw_pages_all'] = isset($_POST['cw_pages_all']) ? 1:0;
 	
 	// utility - since 1.0.4
 	//404, search, archive
@@ -204,12 +215,14 @@ function conditional_widgets_widget($instance) {
 	$instance['cw_select_pages']
 	$instance['cw_pages_sub_checkbox']
 	$instance['cw_selected_pages']
+	$instance['cw_pages_all'] // since 1.8
 	
 	//cats
 	$instance['cw_cats_enable_checkbox']
 	$instance['cw_select_cats']
 	$instance['cw_cats_sub_checkbox']
 	$instance['cw_selected_cats']
+	$instance['cw_cats_all']  // since 1.8
 	
 	// utility
 	$instance['cw_posts_page_hide']
@@ -269,7 +282,22 @@ function conditional_widgets_widget($instance) {
 	$arr_pages = $instance['cw_selected_pages'];
 		
 	if ($instance['cw_pages_enable_checkbox'] && is_page()) {
-		//box checked for caring about what pages
+		
+		//box checked for caring about pages
+		
+
+
+		// see if we are using same logic for ALL pages
+		if (isset($instance['cw_pages_all']) && $instance['cw_pages_all'] == 1) {
+			if ($instance['cw_select_pages'] == 1) {
+				// SHOW
+				return $instance;
+			} else {
+				// HIDE
+				return false;
+			}
+		}
+
 		$current_page_id = $wp_query->post->ID;
 		
 		//see if we care about subpages
@@ -314,11 +342,23 @@ function conditional_widgets_widget($instance) {
 		}
 	} //is_page && we care
 	
-	//see if we care about categories...   (2/28/2012: AND if this page is related to categories...)
+	//see if we care about categories... 
 	$match = false;
 	if ($instance['cw_cats_enable_checkbox'] && (is_single() || is_category())) {
 		//starting point. haven't matched yet - checked categories.
 		
+		// see if we are using same logic for ALL categories
+		if (isset($instance['cw_cats_all']) && $instance['cw_cats_all'] == 1) {
+			if ($instance['cw_select_cats'] == 1) {
+				// SHOW
+				return $instance;
+			} else {
+				// HIDE
+				return false;
+			}
+		}
+
+
 		$arr_cats = $instance['cw_selected_cats'];
 
 		//expand arr_cats to include subcats
