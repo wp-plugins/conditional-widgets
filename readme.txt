@@ -29,6 +29,10 @@ Standard Installation Procedure
 
 == Changelog ==
 
+= 2.0.1 =
+* Major Rewrite: modified how settings are stored.
+* IMPORTANT! If updating in a MultiSite/Network environment, you'll need to visit the dashboard of every site for the plugin to continue to work properly.  If you have a large network, consider using my helper plugin: <a href='https://github.com/MadtownLems/cets-multisite-dashboard-crawler'>https://github.com/MadtownLems/cets-multisite-dashboard-crawler</a>
+
 = 1.8 =
 * Added an additional checkbox for ALL pages/categories to, once again, make the UI even easier to understand
 
