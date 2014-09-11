@@ -2,7 +2,7 @@
 Contributors: MadtownLems, kgraeme, CETS
 Tags: widgets
 Requires at least: 3.0
-Tested up to: 3.9
+Tested up to: 4.0
 Stable tag: trunk
 
 This plugin adds a form to each widget on the Widgets panel which allows users to choose which pages and/or categories the widget is either displayed on or hidden from.
