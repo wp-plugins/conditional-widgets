@@ -7,6 +7,7 @@ Stable tag: trunk
 
 Easily control the display of widgets based on pages or categories
 
+IMPORTANT: If upgrading a MultiSite installation from 1.x to 2.x, you'll need to visit the dashboard of each site in order to make Conditional Widgets function on that site.  If you have a large number of sites, consider using this small plugin to assist you in doing so: https://github.com/MadtownLems/cets-multisite-dashboard-crawler
 
 == Description ==
 
@@ -29,12 +30,17 @@ Standard Installation Procedure
 1. Upload the `cets-conditional-widgets` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
+* IMPORTANT! If updating in a MultiSite/Network environment, you'll need to visit the dashboard of every site for the plugin to continue to work properly.  If you have a large network, consider using my helper plugin: <a href='https://github.com/MadtownLems/cets-multisite-dashboard-crawler'>https://github.com/MadtownLems/cets-multisite-dashboard-crawler</a>
+
 
 == Changelog ==
 
+= 2.0.5 =
+* Attempted to resolve the strict warnings
+* IMPORTANT! If updating in a MultiSite/Network environment, you'll need to visit the dashboard of every site for the plugin to continue to work properly.  If you have a large network, consider using my helper plugin: <a href='https://github.com/MadtownLems/cets-multisite-dashboard-crawler'>https://github.com/MadtownLems/cets-multisite-dashboard-crawler</a>
+
 = 2.0.1 =
 * Major Rewrite: modified how settings are stored.
-* IMPORTANT! If updating in a MultiSite/Network environment, you'll need to visit the dashboard of every site for the plugin to continue to work properly.  If you have a large network, consider using my helper plugin: <a href='https://github.com/MadtownLems/cets-multisite-dashboard-crawler'>https://github.com/MadtownLems/cets-multisite-dashboard-crawler</a>
 
 = 1.8 =
 * Added an additional checkbox for ALL pages/categories to, once again, make the UI even easier to understand

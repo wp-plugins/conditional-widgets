@@ -137,6 +137,11 @@ function conditional_widgets_form($widget, $return, $instance) {
 			<input type="checkbox" name="cw_pages_enable_checkbox" <?php checked($instance['cw_pages_enable_checkbox']); ?>> <?php _e('Enable Page Logic and '); ?>
 			<?php conditional_widgets_form_show_hide_select('cw_select_pages', $instance['cw_select_pages'], false); ?> <?php _e('on selected Pages:'); ?><br>
 				<span class='cw_sub_checkbox'>
+					<?php
+					if ( ! isset($instance['cw_pages_all']) ) {
+						$instance['cw_pages_all'] = 0;
+					}
+					?>
 					<input type="checkbox" name="cw_pages_all" value="1" <?php checked($instance['cw_pages_all']); ?>> <?php _e('ALL pages (or select below)'); ?><br/>
 				</span>
 
