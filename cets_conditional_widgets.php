@@ -4,8 +4,7 @@ Plugin Name: Conditional Widgets
 Plugin URI: http://wordpress.org/extend/plugins/conditional-widgets/
 Description: Grants users advanced control over which pages and categories each widget is displayed on
 Version: 2.0.5
-Author: Jason Lemahieu and Kevin Graeme
-Author URI: http://madtownlems.wordpress.com
+Author: Jason Lemahieu and Kevin Graeme (Cooperative Extension Technology Services)
 License: GPLv2
 */
 
