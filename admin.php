@@ -1,81 +1,111 @@
 <?php
+/**
+ * @author    Jason Lemahieu and Kevin Graeme (Cooperative Extension Technology Services)
+ * @copyright Copyright (c) 2011 - 2015 Jason Lemahieu and Kevin Graeme (Cooperative Extension Technology Services)
+ * @license   http://www.gnu.org/licenses/gpl-2.0.html GPLv2
+ * @package   CETS\Conditional_Widgets
+ */
 
-require_once( dirname(__FILE__) . '/update.php');
-require_once( dirname(__FILE__) . '/walkers.php');
-require_once( dirname(__FILE__) . '/form.php');
+/** Actions ***********************************************************/
+add_action( 'plugins_loaded',        'conditional_widgets_load_plugin_textdomain' );
+add_action( 'admin_enqueue_scripts', 'conditional_widgets_enqueue_assets'         );
 
+function conditional_widgets_enqueue_assets( $hook ) {
 
+	$pages = apply_filters( 'conditional_widgets_admin_pages', array( 'widgets.php', 'customize.php' ) );
+
+	if ( ! in_array( $hook, $pages ) ) {
+		return;
+	}
+
+	add_action( 'admin_print_footer_scripts', 'conditional_widgets_add_js' );
+
+	wp_enqueue_style( 'conditional_widgets_admin_styles', plugins_url( "css/conditional-widgets-admin.css", __FILE__ ), array(), '2.1.0-dev' );
+
+} // /function conditional_widgets_enqueue_assets()
+
+/**
+ * Inject javascript into footerp
+ *
+ * @since	2.1.0
+ *
+ * @return	string
+ */
+function conditional_widgets_add_js() { ?>
+<script type='text/javascript'>function conditional_widgets_form_toggle(divID) { jQuery("#" + divID).slideToggle("slow"); }</script>
+<?php
+} // /function add_js()
+
+/**
+ * Load the plugin's textdomain hooked to 'plugins_loaded'.
+ *
+ * @since	1.0.0
+ * @access	public
+ *
+ * @see		load_plugin_textdomain()
+ * @see		plugin_basename()
+ * @action	plugins_loaded
+ *
+ * @return	void
+ */
+function conditional_widgets_load_plugin_textdomain() {
+
+	load_plugin_textdomain(
+		'conditional-widgets',
+		false,
+		dirname( plugin_basename( __FILE__ ) ) . '/languages/'
+	);
+
+}  // /function load_plugin_textdomain()
 /**
  * Helper function for outputting the select boxes in the widget's form
  */
-function conditional_widgets_form_show_hide_select($name, $value='', $only=false) {
+function conditional_widgets_form_show_hide_select( $name, $value = '', $only = false ) {
 	echo "<select name=$name>";
-	echo "<option value='1' ";
-	if ($value == 1) {echo "selected='selected'";}
-	echo ">Show </option>";
+		echo "<option value='1' ";
+		selected( $value, 1, true );
+		echo ">" . __( 'Show', 'conditional-widgets' ) . "</option>";
 	
-	if ($only) {
+	if ( $only ) {
 		echo "<option value='2' ";
-		if ($value == 2) {echo "selected='selected'";}
-		echo "> Show only</option>";
+		selected( $value, 2, true );
+		echo ">" . __( 'Show only', 'conditional-widgets' ) . "</option>";
 	}
-	
-	echo "<option value='0' ";
-	if ($value == 0) {echo "selected='selected'";}
-	echo ">Hide </option>";
+
+		echo "<option value='0' ";
+		selected( $value, 0, true );
+		echo ">" . __( 'Hide', 'conditional-widgets' ) . "</option>";
 	echo "</select>";
-}	
-
-
-/**
- * Display CSS in admin head
- */
-function conditional_widgets_css_admin() {
-	
-	// CSS and Javascript for HTML HEAD
-	?>
-	<!-- Conditional Widgets Admin CSS -->
-	<link rel="stylesheet" href="<?php echo plugins_url('css/conditional-widgets-admin.css',__FILE__)?>" type="text/css" />
-
-    <?php 
-}
-
-/**
- * Enqueue javascript for Widget form
- */
-function conditional_widgets_admin_scripts() {
-	wp_enqueue_script("jquery");
-	wp_enqueue_script("conditional_widgets_admin_scripts", plugins_url('js/conditional-widgets-admin.js',__FILE__), 'jquery');
-}
-
-//only embed these on the widget page
-if (strpos($_SERVER['REQUEST_URI'], 'widgets.php')) {
-	add_action('admin_head', 'conditional_widgets_css_admin');
-	add_action('admin_print_scripts', 'conditional_widgets_admin_scripts');
-}
-
-
-
+} // /function conditional_widgets_form_show_hide_select()
 
 /**
  * Helper function for displaying the list of checkboxes for Pages
  */
-function conditional_widgets_page_checkboxes($selected=array()) {
-	echo "<ul class='conditional-widget-selection-list'>";
-	wp_list_pages( array( 'title_li' => null, 'walker' => new Conditional_Widgets_Walker_Page_Checklist($selected) ) );
-	echo "</ul>";
-}
+function conditional_widgets_page_checkboxes( $selected = array() ) {
 
-
-function conditional_widgets_term_checkboxes($tax, $type, $selected = array()) {
-	echo "<ul class='conditional-widget-selection-list'>";
 	$args = array(
-			'selected_cats' => $selected,
-			'checked_ontop' => false,
-			'taxonomy' => $tax,
-			'walker' => new Conditional_Widget_Walker_Category_Checklist($type, $tax),
+		'title_li' => null,
+		'walker'   => new Conditional_Widgets_Walker_Page_Checklist( $selected ),
+	);
 
-		);
-	wp_terms_checklist(0, $args);
+	echo "<ul class='conditional-widget-selection-list'>";
+	wp_list_pages( $args );
 	echo "</ul>";
-}
+
+} // /function conditional_widgets_page_checkboxes()
+
+
+function conditional_widgets_term_checkboxes( $tax, $type, $selected = array() ) {
+
+	$args = array(
+		'selected_cats' => $selected,
+		'checked_ontop' => false,
+		'taxonomy'      => $tax,
+		'walker'        => new Conditional_Widget_Walker_Category_Checklist( $type, $tax ),
+	);
+
+	echo "<ul class='conditional-widget-selection-list'>";
+		wp_terms_checklist( 0, $args );
+	echo "</ul>";
+
+} // /function conditional_widgets_term_checkboxes()
