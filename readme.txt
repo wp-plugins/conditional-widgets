@@ -33,6 +33,10 @@ Standard Installation Procedure
 
 == Changelog ==
 
+= 2.2 =
+ * New Features: Hide on Desktop / Hide on Mobile.  (Note that using either of these options will immediately hide the widget when the condition is true, and any other options to 'show' will be ignored.
+ * Fixes lots of small bugs related to the display of the widget control form
+
 = 2.1 =
 * Major update of code formatting to better align with WordPress style and guidelines - props @cFoellmann
 * Support Conditional Widgets toggle JavaScript on the Customize screen

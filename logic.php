@@ -39,9 +39,27 @@ function conditional_widgets_widget( $instance ) {
 	$instance['cw_date_archive_hide']
 	$instance['cw_author_archive_hide']
 	$instance['cw_tag_archive_hide']
+
+	// utility - other
+	$instance['cw_mobile_hide'] - since 2.2
 	
 	*/
 	
+	// First, process 'other' options which take precedence over the following
+
+	/* is_mobile */
+	if ( isset( $instance['cw_mobile_hide'] ) && $instance['cw_mobile_hide'] == 1 ) {
+		if ( wp_is_mobile() ) {
+			return false;
+		}
+	}
+
+	/* is_NOT_mobile */
+	if ( isset( $instance['cw_desktop_hide'] ) && $instance['cw_desktop_hide'] == 1 ) {
+		if ( ! wp_is_mobile() ) {
+			return false;
+		}
+	}
 
 
 	global $wp_query;

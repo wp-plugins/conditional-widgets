@@ -60,22 +60,33 @@ function conditional_widgets_load_plugin_textdomain() {
 /**
  * Helper function for outputting the select boxes in the widget's form
  */
-function conditional_widgets_form_show_hide_select( $name, $value = '', $only = false ) {
-	echo "<select name=$name>";
-		echo "<option value='1' ";
-		selected( $value, 1, true );
-		echo ">" . __( 'Show', 'conditional-widgets' ) . "</option>";
+function conditional_widgets_form_show_hide_select( $name, $value = '', $only = false, $echo = false ) {
+	
+	$o = ''; //output
+
+	$o .= "<select name=$name>";
+		$o .= "<option value='1' ";
+		$o .= selected( $value, 1, false );
+		$o .= ">" . __( 'Show', 'conditional-widgets' ) . "</option>";
 	
 	if ( $only ) {
-		echo "<option value='2' ";
-		selected( $value, 2, true );
-		echo ">" . __( 'Show only', 'conditional-widgets' ) . "</option>";
+		$o .= "<option value='2' ";
+		$o .= selected( $value, 2, false );
+		$o .= ">" . __( 'Show only', 'conditional-widgets' ) . "</option>";
 	}
 
-		echo "<option value='0' ";
-		selected( $value, 0, true );
-		echo ">" . __( 'Hide', 'conditional-widgets' ) . "</option>";
-	echo "</select>";
+		$o .= "<option value='0' ";
+		$o .= selected( $value, 0, false );
+		$o .= ">" . __( 'Hide', 'conditional-widgets' ) . "</option>";
+	$o .= "</select>";
+
+	if ( $echo ) {
+		echo $o;
+		return '';
+	} else {
+		return $o;
+	}
+
 } // /function conditional_widgets_form_show_hide_select()
 
 /**

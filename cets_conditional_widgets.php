@@ -3,7 +3,7 @@
 Plugin Name: Conditional Widgets
 Plugin URI:  http://wordpress.org/extend/plugins/conditional-widgets/
 Description: Grants users advanced control over which pages and categories each widget is displayed on
-Version:     2.1
+Version:     2.2
 Author:      Jason Lemahieu and Kevin Graeme (Cooperative Extension Technology Services)
 License:     GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -28,6 +28,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 /* CHANGELOG 
+	= 2.2 =
+		* New Features: Hide on Desktop / Hide on Mobile.  (Note that using either of these options will immediately hide the widget when the condition is true, and any other options to 'show' will be ignored.
+ 		* Fixes lots of small bugs related to the display of the widget control form
 	= 2.1 =
 		* Major update of code formatting to better align with WordPress style and guidelines - props @cFoellmann
 		* Support Conditional Widgets toggle JavaScript on the Customize screen
@@ -82,6 +85,8 @@ function conditional_widgets_init_instance( $instance ) {
 		'cw_date_archive_hide',
 		'cw_tag_archive_hide',
 		'cw_posts_page_hide',
+		'cw_mobile_hide',
+		'cw_desktop_hide'
 	);
 
 	foreach ( $keys as $key ) {

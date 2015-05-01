@@ -52,7 +52,7 @@ function conditional_widgets_form( $widget, $return, $instance ) {
 			</p>
 			<p>
 				<input type="checkbox" name="cw_home_enable_checkbox" id="cw_home_enable_checkbox_<?php print $widget->id; ?>" <?php checked( $instance['cw_home_enable_checkbox'] ); ?>>
-				<?php conditional_widgets_form_show_hide_select( 'cw_select_home_page', $instance['cw_select_home_page'], true ); ?>
+				<?php conditional_widgets_form_show_hide_select( 'cw_select_home_page', $instance['cw_select_home_page'], true, true ); ?>
 				<label for="cw_home_enable_checkbox_<?php print $widget->id; ?>"><?php _e( 'on Front Page', 'conditional-widgets' ); ?></label>
 			</p>
 			<?php
@@ -91,26 +91,30 @@ function conditional_widgets_form( $widget, $return, $instance ) {
 							$selected_ids = $custom_subdata['selected_ids'];
 						}
 						echo "<h6 class='conditional-widget-header conditional-widget-sub-heading'>{$taxonomy_object->labels->name}</h6>";
+
 						printf(
 							__( '%s and %s', 'conditional-widgets' ),
 							"<input type='checkbox' name='cw_custom[{$type}][{$tax}][enable]' value='1' "
 								. checked($custom_subdata['enable'], 1, 0 ) . '>'
 								. sprintf( _x( 'Enable %s Logic', '(Custom) Post Type will fill the placeholder', 'conditional-widgets' ), $post_type_object->labels->singular_name )
 								. '</label>',
-							conditional_widgets_form_show_hide_select("cw_custom[$type][$tax][select]", $custom_subdata['select'])
+							conditional_widgets_form_show_hide_select( "cw_custom[{$type}][{$tax}][select]", $custom_subdata['select'] )
 								. sprintf( __( 'on %1$s in selected %2$s:', 'conditional-widgets' ), $post_type_object->labels->name, $taxonomy_object->labels->name )
 						);
+
 						echo "<p>";
 							echo "<span class='cw_sub_checkbox'><label>";
 								echo "<input type='checkbox' name='cw_custom[{$type}][{$tax}][all]' value='1' " . checked( $custom_subdata['all'], 1, 0 ) . " >";
 								printf( __( 'ALL %s (or select below)', 'conditional-widgets' ), $taxonomy_object->labels->name );
 							echo "</label></span>";
+
 							if ( is_taxonomy_hierarchical( $tax ) ) {
 								echo "<span class='cw_sub_checkbox'><label>";
 									echo "<input type='checkbox' name='cw_custom[{$type}][{$tax}][sub]' " . checked( $custom_subdata['sub'], 1, 0 ) . ">";
 									printf( __( 'Include sub-%s automatically', 'conditional-widgets' ), $taxonomy_object->labels->name );
 								echo "</label></span>";
 							}
+
 						echo "</p>";
 
 						echo "<div class='conditional-widgets-checkbox-wrapper'>";
@@ -126,11 +130,11 @@ function conditional_widgets_form( $widget, $return, $instance ) {
 				printf(
 					__( '%s and %s', 'conditional-widgets' ),
 					'<label><input type="checkbox" name="cw_pages_enable_checkbox" '
-						. checked( $instance['cw_pages_enable_checkbox'] )
+						. checked( $instance['cw_pages_enable_checkbox'], 1, false )
 						. '>'
 						. sprintf( _x( 'Enable %s Logic', '(Custom) Post Type will fill the placeholder', 'conditional-widgets' ), __( 'Page' ) )
 						. '</label>',
-					conditional_widgets_form_show_hide_select( 'cw_select_pages', $instance['cw_select_pages'], false )
+					conditional_widgets_form_show_hide_select( 'cw_select_pages', $instance['cw_select_pages'], false, false )
 						. __( 'on selected Pages:', 'conditional-widgets' )
 				);
 				if ( ! isset( $instance['cw_pages_all'] ) ) {
@@ -209,6 +213,28 @@ function conditional_widgets_form( $widget, $return, $instance ) {
 				</li>
 			</ul>
 
+			<h6 class="conditional-widget-header conditional-widget-sub-heading"><?php _e( 'Other Options', 'conditional-widgets' ); ?></h6>
+			<p><?php 
+				_e('Note: The following options will take precendence over those above.', 'conditional-widgets');
+			?></p>
+			<ul class="conditional-widgets-special-page-option-list">
+				<li>
+					<label>
+						<input type="checkbox" name="cw_mobile_hide_checkbox" <?php checked( $instance['cw_mobile_hide'] ); ?>>
+						<?php _e( 'Hide on Mobile', 'conditional-widgets' ); ?>
+					</label>
+				</li>
+				<li>
+					<label>
+						<input type="checkbox" name="cw_desktop_hide_checkbox" <?php checked( $instance['cw_desktop_hide'] ); ?>>
+						<?php _e( 'Hide on Desktop', 'conditional-widgets' ); ?>
+					</label>
+				</li>
+			</ul>
+
+			
+			
+
 		</div> <!-- toggled div -->
 
 	</div> <!-- /.cets-conditional-widgets -->
@@ -282,6 +308,8 @@ function conditional_widgets_update( $new_instance, $old_instance ) {
 	$instance['cw_date_archive_hide']   = isset( $_POST['cw_date_archive_hide_checkbox']   ) ? 1 : 0;
 	$instance['cw_author_archive_hide'] = isset( $_POST['cw_author_archive_hide_checkbox'] ) ? 1 : 0;
 	$instance['cw_tag_archive_hide']    = isset( $_POST['cw_tag_archive_hide_checkbox']    ) ? 1 : 0;
+	$instance['cw_mobile_hide']    = isset( $_POST['cw_mobile_hide_checkbox']    ) ? 1 : 0;
+	$instance['cw_desktop_hide']    = isset( $_POST['cw_desktop_hide_checkbox']    ) ? 1 : 0;
 
 	return $instance;
 
@@ -300,6 +328,8 @@ function cets_conditional_widgets_instance_is_active( $instance ) {
 		|| $instance['cw_date_archive_hide']
 		|| $instance['cw_tag_archive_hide']
 		|| $instance['cw_posts_page_hide']
+		|| $instance['cw_mobile_hide']
+		|| $instance['cw_desktop_hide']
 	) {
 		return true;
 	}
